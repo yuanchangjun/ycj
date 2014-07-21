@@ -9,23 +9,34 @@ import javax.servlet.ServletException;
 import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.Statement;
 
 public class ViewListServlet extends HttpServlet{
     public void doGet(HttpServletRequest req,HttpServletResponse resp)
         throws IOException,ServletException{
            
-        String uri = "jdbc:mysql://localhost/test?username=root&password=";
+        String uri = "jdbc:mysql://localhost/test?user=root&password=";
+        String sql = "insert into adimin values (1,'ycj','123','xingfu','财务部')";
+        Connection conn = null;
+        Statement stmt = null;
        try{ 
            Class.forName("com.mysql.jdbc.Driver");
-
-           Connection connection = DriverManager.getConnection(uri);
-                
+           conn = DriverManager.getConnection(uri);          
+           stmt = conn.createStatement();           
+           stmt.execute(sql);     
        }catch(Exception e){
+        System.out.println(e);        
+       }finally{
+            try{
+                stmt.close();
+            }catch(Exception e){
+                
+            }
+            try{conn.close(); 
+            }catch(Exception e){
 
-        System.out.println(e);
-
-       }
-
-
+            }     
+        }
     }
 }
+
